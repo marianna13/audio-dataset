@@ -2,16 +2,9 @@
 from tqdm import tqdm
 import os
 import pandas as pd
-from pydub import AudioSegment
 import json
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-
-
-def wav_to_flac(wav_path, flac_path, SAMPLE_RATE):
-    wav_file = AudioSegment.from_wav(wav_path)
-    wav_file.frame_rate = SAMPLE_RATE
-    wav_file.export(flac_path.replace('wav', 'flac'), format="flac")
 
 
 if __name__ == '__main__':
