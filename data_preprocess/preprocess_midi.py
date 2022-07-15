@@ -2,7 +2,6 @@
 from tqdm import tqdm
 import os
 import multiprocessing as mp
-import threading as td
 import pandas as pd
 import time
 import subprocess
@@ -12,19 +11,33 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 
-def process_data(filenames, rng, output_dir):
+def process_data(filenames, rng, output_dir, audio_dir, dataset_name):
+    from utils.file_utils import json_dump
+    from utils.audio_utils import audio_to_flac
+    from utils.dataset_parameters import AUDIO_SAVE_SAMPLE_RATE
+    from utils.to_audio import midi_to_audio
     start, end = rng
     filenames = filenames[start:end]
     file_id = 0
     for filename in tqdm(filenames, total=len(filenames)):
-        audio_path = f'{audio_dir}/{filename}'
+        midi_path = f'{audio_dir}/{filename}'
+        audio_path = midi_path.replace('.mid', 'flac')
         text = audio_path.split('/')[-1].replace('.mid', '')
         text = text.replace('_', ' ')
         text = text.replace('.flac', '')
         text = f'{text}, MIDI'
-        audio_json = {'text': text, 'tag': dataset_name}
+        audio_json = {
+            'text': [text],
+            'tag': [filename],
+            'original_data': {
+                'title': dataset_name
+            },
+
+        }
         audio_json_save_path = f'{output_dir}/{file_id}.json'
         audio_save_path = f'{output_dir}/{file_id}.flac'
+        midi_to_audio(midi_file=midi_path,
+                      audio_file=audio_path.replace('.mid', 'flac'))
 
         result = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of',
                                  'default=noprint_wrappers=1:nokey=1', audio_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -43,21 +56,12 @@ def process_data(filenames, rng, output_dir):
             continue
 
 
-if __name__ == '__main__':
-    from utils.file_utils import json_dump
-    from utils.audio_utils import audio_to_flac
-    from utils.dataset_parameters import AUDIO_SAVE_SAMPLE_RATE
-    dataset_name = 'midi_clean'
-    data_dir = f'/opt/marianna/clap/raw_datasets/{dataset_name}'
-    output_dir = f'/opt/marianna/clap/processed_datasets/{dataset_name}/clean_midi-4000'
+def preprocess(audio_dir, output_dir, dataset_name, num_process):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    audio_dir = '/opt/marianna/clap/raw_datasets/clean_midi/AUDIO'
-    start, end = 0, 4000
-    filenames = os.listdir(audio_dir)[start:end]
+    filenames = os.listdir(audio_dir)
     N = len(filenames)
-    num_process = 70
     processes = []
     out_dirs = [f'{output_dir}/{i} 'for i in range(num_process)]
     for out_dir in out_dirs:
@@ -69,10 +73,18 @@ if __name__ == '__main__':
     s = time.time()
     for rng, out_dir in zip(rngs, out_dirs):
         start, end = rng
-        p = mp.Process(target=process_data, args=[filenames, rng, out_dir])
+        p = mp.Process(target=process_data, args=[
+                       filenames, rng, out_dir, audio_dir, dataset_name])
         p.start()
         processes.append(p)
     for p in processes:
         p.join()
     e = time.time()
     print(f'Processed in {round(e-s, 2)} seconds')
+
+
+if __name__ == '__main__':
+    dataset_name = 'test_midi'
+    audio_dir = f'{dataset_name}/AUDIO'
+    output_dir = f'processed/{dataset_name}'
+    preprocess(audio_dir, output_dir, dataset_name, num_process=4)
