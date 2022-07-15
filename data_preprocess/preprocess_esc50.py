@@ -19,13 +19,27 @@ if __name__ == '__main__':
     meta_dir = f'{data_dir}/meta/esc50.csv'
 
     meta = pd.read_csv(meta_dir)
-    filenames, texts = meta['filename'].values, meta['category'].values
     file_id = 0
-    for filename, text in tqdm(zip(filenames, texts), total=len(filenames)):
+    for row in tqdm(meta.iterrows(), total=len(meta)):
+        filename, fold, target, category, esc10, src_file, take = row[1].values
         audio_path = f'{audio_dir}/{filename}'
-        text = text.replace('_', ' ')
-        audio_json = {'text': text, 'tag': 'ESC-50',
-                      'original_data': {'category': text}}
+        category = category.replace('_', ' ')
+        text = f'The sound of the {category}'
+        tag = category
+        original_data = {
+            'title': 'ESC-50',
+            'Description': 'ESC-50: Dataset for Environmental Sound Classification',
+            'license': 'Creative Commons Attribution Non-Commercial license',
+            'fname': filename,
+            'fold': fold,
+            'target': target,
+            'category': category,
+            'esc10': esc10,
+            'src_file': src_file,
+            'take': take
+        }
+        audio_json = {'text': text, 'tag': tag,
+                      'original_data': original_data}
         audio_json_save_path = f'{output_dir}/{file_id}.json'
         audio_save_path = f'{output_dir}/{file_id}.flac'
         json_dump(audio_json, audio_json_save_path)
