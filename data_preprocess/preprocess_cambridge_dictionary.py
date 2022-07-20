@@ -37,10 +37,10 @@ def preprocess(meta_dir, output_dir, audio_dir):
 
     meta = pd.read_csv(meta_dir)
 
-    file_id = 0
+    file_id = 37529
     for row in tqdm(meta.iterrows(), total=len(meta)):
-        index, label, URL, us_URL = row[1].values
-        text = f'the person is reading the word {label} in British accent'
+        index, label,gb_URL, URL = row[1].values
+        text = f'the person is reading the word {label} in American accent'
 
         audio_path = download_and_save_file(URL, audio_dir)
         audio_json = {
@@ -50,7 +50,7 @@ def preprocess(meta_dir, output_dir, audio_dir):
                 'title': 'Cambridge Dictionary dataset',
                 'Description': 'Words and their pronunciations scraped from the Cambridge Dictionary website',
                 'URL': URL,
-                'accent': 'British'
+                'accent': 'American'
             }
         }
         audio_json_save_path = f'{output_dir}/{file_id}.json'
@@ -65,6 +65,6 @@ def preprocess(meta_dir, output_dir, audio_dir):
 if __name__ == '__main__':
     dataset_name = 'cambridge_dictionary'
     output_dir = f'{dataset_name}'
-    meta_dir = 'cambridge_dictionary/meta.csv'
+    meta_dir = 'raw_datasets/cambridge_dictionary/meta.csv'
     preprocess(meta_dir=meta_dir, output_dir=output_dir,
                audio_dir='cambridge_dictionary/AUDIO')
