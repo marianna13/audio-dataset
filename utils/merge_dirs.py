@@ -4,14 +4,14 @@ from rename import rename_files
 import argparse
 
 parser = argparse.ArgumentParser(description='Merge subdirectories into one')
-parser.add_argument('root_dir', metavar='-path', type=str,
+parser.add_argument('--root_dir', type=str,
                     help='The directory to merge subdirectories')
-parser.add_argument('to_raname', metavar='-to_rename', type=bool,
+parser.add_argument('--to_rename',  type=bool, default=False,
                     help='If True renames all the files')
 args = parser.parse_args()
 
 root_dir = args.root_dir
-to_rename = args.to_raname
+to_rename = args.to_rename
 
 
 if __name__ == '__main__':
@@ -26,9 +26,9 @@ if __name__ == '__main__':
         sub_dir = f'{root_dir}/{sub_dir}'
         file_names = os.listdir(sub_dir)
         for file_name in file_names:
-            ext = file_name.split('.')[-1]
+            ext = file_name.split('.')[-1].lower()
             file_name = file_name
-            file_name_x = file_name[:-4]+f'_{s_dir}.{ext}'
+            file_name_x = file_name[:-4]+f'___{s_dir}.{ext}'
             shutil.move(os.path.join(sub_dir, file_name),
                         os.path.join(root_dir, file_name_x.replace('  ', '')))
         shutil.rmtree(sub_dir)
