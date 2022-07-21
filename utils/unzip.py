@@ -4,13 +4,11 @@ import argparse
 parser = argparse.ArgumentParser(description='Unzip file',
                                  add_help=False)
 
-parser.add_argument('src_file',
-                    metavar='src_file',
+parser.add_argument('--src_file',
                     type=str,
                     help='Archive file to unzip')
 
-parser.add_argument('target_dir',
-                    metavar='target_dir',
+parser.add_argument('--target_dir',
                     type=str,
                     help='Folder to save extracted contents to')
 
