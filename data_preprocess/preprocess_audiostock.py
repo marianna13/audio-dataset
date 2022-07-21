@@ -1,9 +1,15 @@
 from tqdm import tqdm
 import os
 import pandas as pd
-import sys
-import requests
+import sys, time, requests, os
+import multiprocessing as mp
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
+
+def remove_no(title):
+    end_no = title.find(' ')
+    return title[end_no+1:]
+
 
 def download_and_save_file(URL, audio_dir):
     headers = {
@@ -21,24 +27,16 @@ def download_and_save_file(URL, audio_dir):
         f.write(doc.content)
     return audio_path
 
-
-def preprocess(meta_dir, output_dir, audio_dir):
+def preoprocess_part(meta, rng, output_dir, audio_dir):
     from utils.file_utils import json_dump
     from utils.audio_utils import audio_to_flac
     from utils.dataset_parameters import AUDIO_SAVE_SAMPLE_RATE
-
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    if not os.path.exists(audio_dir):
-        os.makedirs(audio_dir)
-
-    meta = pd.read_csv(meta_dir)
-
+    start, end = rng
     file_id = 0
     for row in tqdm(meta.iterrows(), total=len(meta)):
         index, title,impression, scene,purpose,tags,audio_url,audio_size  = row[1].values
-        text = title
+        text = title.replace('\n', '')
+        text = remove_no(text)
 
         audio_path = download_and_save_file(audio_url, audio_dir)
         audio_json = {
@@ -62,9 +60,43 @@ def preprocess(meta_dir, output_dir, audio_dir):
                       AUDIO_SAVE_SAMPLE_RATE, no_log=True)
         file_id += 1
 
+def preprocess(meta_dir, output_dir, audio_dir):
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    if not os.path.exists(audio_dir):
+        os.makedirs(audio_dir)
+
+    meta = pd.read_csv(meta_dir)
+    N = len(meta)
+    processes = []
+    num_process = 10
+    out_dirs = [f'{output_dir}/{i} 'for i in range(num_process)]
+    for out_dir in out_dirs:
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+    rngs = [(i*int(N/num_process), (i+1)*int(N/num_process))
+            for i in range(num_process)]
+    print(rngs)
+    s = time.time()
+    for rng, out_dir in zip(rngs, out_dirs):
+        start, end = rng
+        meta_part = meta.loc[start:end]
+        p = mp.Process(target=preoprocess_part, args=[
+                       meta_part, rng, out_dir, audio_dir])
+        p.start()
+        processes.append(p)
+    for p in processes:
+        p.join()
+    e = time.time()
+    print(f'Processed in {round(e-s, 2)} seconds')
+
+
+
 
 if __name__ == '__main__':
-    dataset_name = 'audio_stock'
+    dataset_name = 'audiostock'
     output_dir = f'processed/{dataset_name}'
     meta_dir = 'audiostock_meta.csv'
     audio_dir = f'processed/{dataset_name}/AUDIO'
