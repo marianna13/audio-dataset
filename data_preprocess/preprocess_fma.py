@@ -5,16 +5,19 @@ import pandas as pd
 import multiprocessing as mp
 import time
 import sys
+import re
+import shutil
+import zipfile
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
-AUDIO_DIR = '/mnt/marianna/clap/raw_datasets/fma/fma_small/data/fma_small'
 
 
 def get_audio_path(audio_dir, track_id):
     """
     """
     tid_str = '{:06d}'.format(track_id)
-    return os.path.join(audio_dir, tid_str[:3], tid_str + '.mp3')
+    return os.path.join(audio_dir, tid_str + '.mp3')
 
 
 def load(filepath):
@@ -63,16 +66,31 @@ def load(filepath):
         return tracks
 
 
-def process_data(track_ids, texts, artists, output_dir):
+def process_data(track_ids, texts, artists, output_dir, audio_dir):
+    from utils.file_utils import json_load, json_dump
+    from utils.audio_utils import audio_to_flac
+    from utils.dataset_parameters import AUDIO_SAVE_SAMPLE_RATE
     file_id = 0
     for track_id, text, artist in tqdm(zip(track_ids, texts, artists), total=len(artists)):
-        filename = get_audio_path(AUDIO_DIR, track_id)
+        filename = get_audio_path(audio_dir, track_id)
         audio_path = filename
         title, genre, duration = text
-        caption = f"Music , Genre: {genre} , Title: {title}, Artist: {artist}"
-        audio_json = {'text': caption, 'tag': 'fma'}
+        caption = [f"Music, Genre: {genre} , Title: {title}, Artist: {artist}"]
+        tag =[title]
         duration = int(duration)
         for j in range(0, duration-10, 10):
+            original_data = {
+                'title': 'FMA: A Dataset For Music Analysis',
+                'description':"Free Music Archive (FMA), an open and easily accessible dataset suitable for evaluating several tasks in MIR, a field concerned with browsing, searching, and organizing large music collections.",
+                'license':'MIT License',
+                'filename':filename.split('/')[-1],
+                'split':[j,j+10]
+                }
+            audio_json = {
+                'text': caption, 
+                'tag': tag, 
+                'original_data':original_data,
+                }
 
             audio_json_save_path = f'{output_dir}/{file_id}.json'
             audio_save_path = f'{output_dir}/{file_id}.flac'
@@ -81,36 +99,26 @@ def process_data(track_ids, texts, artists, output_dir):
                           AUDIO_SAVE_SAMPLE_RATE, segment_start=j,  segment_end=j+10)
             file_id += 1
 
-
-if __name__ == '__main__':
-    from utils.file_utils import json_load, json_dump
-    from utils.audio_utils import audio_to_flac
-    from utils.dataset_parameters import AUDIO_SAVE_SAMPLE_RATE
-    dataset_name = 'fma'
-    data_dir = f'/mnt/marianna/clap/raw_datasets/{dataset_name}'
-    output_dir = f'/mnt/marianna/clap/processed_datasets/{dataset_name}'
+def process_subfolder(subfolder, dataset_name):
+    output_dir = f'/home/ubuntu/marianna/clap/processed_datasets/{dataset_name}/{subfolder}'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    audio_dir = f'{data_dir}/audio'
-    meta_dir = f'/mnt/marianna/clap/raw_datasets/fma/meta/fma_metadata/tracks.csv'
+    audio_dir = f'/home/ubuntu/marianna/clap/raw_dataset/fma_full/fma_full/{subfolder}'
+    meta_dir = f'/home/ubuntu/marianna/clap/raw_dataset/fma_metadata/tracks.csv'
+    track_ids = [int(re.sub('0','',audio_name.replace('.mp3',''))) for audio_name in os.listdir(audio_dir)]
     meta = load(meta_dir)
-    subset = meta['set']
-    small_ids = list(subset.loc[subset['subset'] == 'small'].index)
-    tracks = meta['track']
+    tracks = meta['track'].iloc[track_ids]
 
-    tracks = tracks[tracks.index.isin(small_ids)]
-    artists = meta['artist']['name']
-    artists = artists[artists.index.isin(small_ids)].values
-    track_ids = tracks.index
+    artists = meta['artist']['name'].iloc[track_ids]
+    artists = artists.values
     texts = tracks[['title', 'genre_top', 'duration']].values
-    N = 1000
-    track_ids = track_ids[:N]
-    texts = texts[:N]
-    artists = artists[:N]
+    N = len(os.listdir(audio_dir))
+    texts = texts
+    artists = artists
 
     file_id = 0
-    num_process = 20
+    num_process = 50
     processes = []
     out_dirs = [f'{output_dir}/{i} 'for i in range(num_process)]
     for out_dir in out_dirs:
@@ -123,10 +131,29 @@ if __name__ == '__main__':
     for rng, out_dir in zip(rngs, out_dirs):
         start, end = rng
         p = mp.Process(target=process_data, args=[
-                       track_ids[start:end], texts[start:end],  artists[start:end], out_dir])
+                       track_ids[start:end], texts[start:end],  artists[start:end], out_dir, audio_dir])
         p.start()
         processes.append(p)
     for p in processes:
         p.join()
     e = time.time()
     print(f'Processed in {round(e-s, 2)} seconds')
+    return output_dir
+
+
+if __name__ == '__main__':
+    from utils.merge_dirs import merge_dirs
+    from utils.unzip import unzip_file
+    dataset_name = 'fma'
+    src_file = 'fma_full.zip'
+    archive = zipfile.ZipFile(src_file)
+    subfolders = set([os.path.dirname(x) for x in archive.namelist()])
+    subfolders = [subfolder.replace('fma_full/', '') for subfolder in subfolders]
+
+    for subfolder in subfolders:
+        unzip_file(src_file, target_dir='raw_dataset', folder='fma_full/'+subfolder)
+        output_dir = process_subfolder(subfolder, dataset_name)
+        merge_dirs(root_dir=output_dir, to_rename=True)
+
+
+
