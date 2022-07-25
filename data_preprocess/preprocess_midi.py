@@ -30,17 +30,7 @@ def process_data(filenames, rng, output_dir, audio_dir, dataset_name):
         text = ' '.join(subfolders).replace('_', ' ')
         text = f'{text} MIDI version'
         if not text.isdigit():
-            audio_json = {
-                'text': [text],
-                'tag': [tag],
-                'original_data': {
-                    'title': dataset_name,
-                    'Description': '130k Rock Songs MIDI files',
-                    'subfolders': subfolders,
-                    'filename':filename
-                },
 
-            }
             audio_json_save_path = f'{output_dir}/{file_id}.json'
             audio_save_path = f'{output_dir}/{file_id}.flac'
             midi_to_audio(midi_file=midi_path,
@@ -54,6 +44,17 @@ def process_data(filenames, rng, output_dir, audio_dir, dataset_name):
                 try:
                     duration = int(float(duration))
                     for j in range(0, duration-10, 10):
+                        audio_json = {
+                            'text': [text],
+                            'tag': [tag],
+                            'original_data': {
+                                'title': dataset_name,
+                                'description': f'{dataset_name} MIDI files',
+                                'subfolders': subfolders,
+                                'filename':filename,
+                                'split': [j, j+10]
+                                },
+                                }
                         audio_json_save_path = f'{output_dir}/{file_id}.json'
                         audio_save_path = f'{output_dir}/{file_id}.flac'
                         json_dump(audio_json, audio_json_save_path)
