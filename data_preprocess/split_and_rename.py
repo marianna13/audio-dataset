@@ -8,16 +8,12 @@ from tqdm import tqdm
 
 random.seed(1234)
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data_dir', type=str, default=None, help='data directory')
-    args = parser.parse_args()
-
+def split_dataset(data_dir):
     test_portion = 0.1
 
     splits = ['train', 'test']
 
-    file_list = glob.glob(f'{args.data_dir}/**/*.flac', recursive=True)
+    file_list = glob.glob(f'{data_dir}/**/*.flac', recursive=True)
     random.shuffle(file_list)
 
     split_idx = int(np.round(len(file_list) * test_portion))
@@ -27,7 +23,7 @@ if __name__ == '__main__':
 
     file_id = 1
     for split in splits:
-        split_output_dir = os.path.join(args.data_dir, split)
+        split_output_dir = os.path.join(data_dir, split)
         os.makedirs(split_output_dir, exist_ok=True)
         for audio_file in tqdm(split_file_list[split]):
             json_file = audio_file.replace('.flac', '.json')
@@ -36,3 +32,11 @@ if __name__ == '__main__':
             shutil.move(audio_file, audio_save_path)
             shutil.move(json_file, audio_json_save_path)
             file_id += 1
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data_dir', type=str, default=None, help='data directory')
+    args = parser.parse_args()
+    data_dir = args.data_dir
+    split_dataset(data_dir)
+
