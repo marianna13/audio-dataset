@@ -6,6 +6,7 @@ import pandas as pd
 import time
 import subprocess
 import sys
+import zipfile
 
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -22,20 +23,19 @@ def process_data(filenames, rng, output_dir, audio_dir, dataset_name):
     for filename in tqdm(filenames, total=len(filenames)):
         
         midi_path = f'{audio_dir}/{filename}'
-        audio_path = midi_path.replace('.mid', 'flac')
+        audio_path = midi_path.replace('.mid', '.flac')
         subfolders = filename.replace('.mid','').split('___')[:-1]
         
-        tag = filename.replace('.mid','').split('___')[-1].replace('.', ' ').replace('_',' ')
+        text = ' '.join(filename.replace('.mid','').replace('_',' ').split())
         
-        text = ' '.join(subfolders).replace('_', ' ')
-        text = f'{text} MIDI version'
+        tag = ' '.join(subfolders).replace('_', ' ')
+        text = f'{text} MIDI version'   
         if not text.isdigit():
 
             audio_json_save_path = f'{output_dir}/{file_id}.json'
             audio_save_path = f'{output_dir}/{file_id}.flac'
             midi_to_audio(midi_file=midi_path,
-                        audio_file=audio_path.replace('.mid', 'flac'))
-
+                        audio_file=audio_path, to_delete=True)
             result = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of',
                                     'default=noprint_wrappers=1:nokey=1', audio_path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             
@@ -61,6 +61,7 @@ def process_data(filenames, rng, output_dir, audio_dir, dataset_name):
                         audio_to_flac(audio_path, audio_save_path,
                                     AUDIO_SAVE_SAMPLE_RATE, segment_start=j,  segment_end=j+10)
                         file_id += 1
+                        
                 except ValueError:
                     continue
 
@@ -74,6 +75,7 @@ def process_data(filenames, rng, output_dir, audio_dir, dataset_name):
 def preprocess(audio_dir, output_dir, dataset_name, num_process):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+    
     
     if not os.path.exists(audio_dir):
         os.makedirs(audio_dir)
@@ -102,7 +104,30 @@ def preprocess(audio_dir, output_dir, dataset_name, num_process):
 
 
 if __name__ == '__main__':
-    dataset_name = '130000_Pop_Rock_Classical_Videogame_EDM_MIDI_Archive[6_19_15]'
-    audio_dir = f'raw_datasets/{dataset_name}'
-    output_dir = f'processed/{dataset_name}'
-    preprocess(audio_dir, output_dir, dataset_name, num_process=70)
+    from utils.merge_dirs import merge_dirs
+    import shutil
+    from utils.unzip import unzip_file
+    from split_and_rename import split_dataset
+    src_file = '/home/ubuntu/marianna/clap/raw_datasets/130000_Pop_Rock_Classical_Videogame_EDM_MIDI_Archive[6_19_15].zip'
+    archive = zipfile.ZipFile(src_file)
+    subfolders = list(set([os.path.dirname(x) for x in archive.namelist()]))
+    subfolders = [s for s in subfolders if s.count('/') == 1]
+    dataset_name = '130000_MIDI_SONGS'
+    data_dir = f'raw_datasets/{dataset_name}'
+    # subfolders = os.listdir(data_dir)
+    for subfolder in sorted(subfolders)[3+42:]:
+        unzip_file(src_file, target_dir='raw_datasets', folder=subfolder)
+        audio_dir = f'{src_file.replace(".zip", "")}/{subfolder}'
+        merge_dirs(root_dir=audio_dir, to_rename=False)
+        merge_dirs(root_dir=audio_dir, to_rename=False)
+        merge_dirs(root_dir=audio_dir, to_rename=False)
+        output_dir = f'/home/ubuntu/marianna/clap/processed_datasets/{dataset_name}/{subfolder.split("/")[-1]}'
+        preprocess(audio_dir, output_dir, dataset_name, num_process=70)
+        shutil.rmtree(audio_dir)
+        merge_dirs(root_dir=output_dir, to_rename=True)
+        split_dataset(data_dir=output_dir)
+        tar_dir = f'processed/{dataset_name}/{subfolder.split("/")[-1]}'
+        subprocess.run(['python', '/home/ubuntu/marianna/clap/audio-dataset/utils/make_tar.py', '--input', output_dir, '--output', tar_dir])
+        shutil.rmtree(output_dir)
+        subprocess.run(['aws', 's3', 'cp', 'processed', 's3://s-laion-audio/webdataset_tar/', '--recursive'])
+        shutil.rmtree(tar_dir)
