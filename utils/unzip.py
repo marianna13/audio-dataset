@@ -21,7 +21,7 @@ parser.add_argument('--folder',
 
 def unzip_file(src_file, target_dir, folder):
     if folder=='all':
-        subprocess.call(['7z', 'x', src_file, '-o'+target_dir])
+        subprocess.call(['7z', 'e', src_file, '-o'+target_dir, '-aoa'])
     else:
         archive = zipfile.ZipFile(src_file)
         for file in archive.namelist():
