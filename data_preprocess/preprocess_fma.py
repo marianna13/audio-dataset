@@ -193,11 +193,10 @@ if __name__ == '__main__':
         output_dir = process_subfolder(subfolder, dataset_name)
         merge_dirs(root_dir=output_dir, to_rename=True)
         split_dataset(data_dir=output_dir)
-        # tar_dir = 'processed/FMA'
-        # subprocess.run(['python', '/home/ubuntu/marianna/clap/audio-dataset/utils/make_tar.py', '--input', output_dir, '--output', f'{tar_dir}/{subfolder}'])
-        # subprocess.run(['aws', 's3', 'cp', 'processed', 's3://s-laion-audio/webdataset_tar/', '--recursive'])
-        # shutil.rmtree(output_dir)
-        # shutil.rmtree(f'{tar_dir}/{subfolder}')
-        # shutil.rmtree(f'/home/ubuntu/marianna/clap/raw_datasets/fma_full/fma_full/{subfolder}')
-        break
+        tar_dir = 'processed/FMA'
+        subprocess.run(['python', '/home/ubuntu/marianna/clap/audio-dataset/utils/make_tar.py', '--input', output_dir, '--output', f'{tar_dir}/{subfolder}'])
+        subprocess.run(['aws', 's3', 'cp', 'processed', 's3://s-laion-audio/webdataset_tar/', '--recursive'])
+        shutil.rmtree(output_dir)
+        shutil.rmtree(f'{tar_dir}/{subfolder}')
+        shutil.rmtree(f'/home/ubuntu/marianna/clap/raw_datasets/fma_full/fma_full/{subfolder}')
 
