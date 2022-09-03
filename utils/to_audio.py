@@ -18,7 +18,7 @@ parser.add_argument('--num_processes', type=int,
 args = parser.parse_args()
 
 
-def midi_to_audio(midi_file, audio_file, no_log=True):
+def midi_to_audio(midi_file, audio_file, no_log=True, to_delete=False):
     sample_rate = 44100
     sound_font = os.path.expanduser('/usr/share/sounds/sf2/FluidR3_GM.sf2')
     if no_log:
@@ -27,7 +27,8 @@ def midi_to_audio(midi_file, audio_file, no_log=True):
     else:
         subprocess.call(['fluidsynth', '-ni', sound_font, midi_file,
                          '-F', audio_file, '-r', str(sample_rate)])
-
+    if to_delete:
+        os.remove(midi_file)
 
 def convert_midi(files, rng, data_dir, audio_dir):
     start, end = rng
