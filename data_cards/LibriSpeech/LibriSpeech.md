@@ -10,7 +10,7 @@
 | [LibriSpeech HF website](https://huggingface.co/datasets/librispeech_asr)  |1.Download from HF Hub with HF cli <br>
 ## Preprocessing Principles
 
-You may refer to [freesonud_librispeech.py](/data_preprocess/preprocess_librispeech.py) for all the details. Here is a concise summary:
+You may refer to [preprocess_librispeech.py](/data_preprocess/preprocess_librispeech.py) for all the details. Here is a concise summary:
 
 For each audio, there are 6 fields in the metadata file, respectively named `file`, `audio`, `text`, `speaker_id`, `chapter_id` and `id`. We retrieve information
 from these 6 fields and form a 2-field `.json` file for each audio. Here are some audio-json pairs selected from the processed dataset:
