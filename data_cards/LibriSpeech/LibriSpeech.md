@@ -43,7 +43,7 @@ from these 6 fields and form a 2-field `.json` file for each audio. Here are som
 
 
 ### I. Json file generation principles 
--  **` text  entry`** We just take data from `text` filed of the original dataset and put it into our JSON (we just lowercase the text)
+-  **` text  entry`** We just take data from `text` field of the original dataset and create a caption with template `a person saying {text}`.
 
 ### II. Audio filtering principles
 1. Keep audios with sampling rate higher than **16KHZ** and discard the rest.
