@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import multiprocessing as mp
 import sys
+import soundfile as sf
 import requests
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
@@ -43,6 +44,10 @@ def preprocess(meta_dir, output_dir, audio_dir):
         text = f'the person is reading the word {label} in American accent'
 
         audio_path = download_and_save_file(URL, audio_dir)
+        try:    
+            sf.read(audio_path)
+        except:
+            continue
         audio_json = {
             'text': [text],
             'tag': [label],

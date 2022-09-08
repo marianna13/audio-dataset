@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import sys, time, requests, os
 import multiprocessing as mp
+import soundfile as sf
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 
@@ -39,6 +40,10 @@ def preoprocess_part(meta, rng, output_dir, audio_dir):
         text = remove_no(text)
 
         audio_path = download_and_save_file(audio_url, audio_dir)
+        try:    
+            sf.read(audio_path)
+        except:
+            continue
         audio_json = {
             'text': [text],
             'tag': tags.split(','),
@@ -71,7 +76,7 @@ def preprocess(meta_dir, output_dir, audio_dir):
     meta = pd.read_csv(meta_dir)
     N = len(meta)
     processes = []
-    num_process = 10
+    num_process = 5
     out_dirs = [f'{output_dir}/{i} 'for i in range(num_process)]
     for out_dir in out_dirs:
         if not os.path.exists(out_dir):
