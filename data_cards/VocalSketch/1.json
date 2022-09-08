@@ -1,0 +1,23 @@
+{
+    "text": [
+        "playing a vocal imitation of seal"
+    ],
+    "tag": [
+        "seal"
+    ],
+    "original_data": {
+        "title": "VocalSketch Data Set 1.1.2",
+        "description": "This dataset contains thousands of vocal imitations of a large set of diverse sounds. These imitations were collected from hundreds of contributors via Amazon's Mechanical Turk website.",
+        "license": "",
+        "filename": "seal - 4895922609717248.wav",
+        "id": "4895922609717248",
+        "stimulus_type": "sound recording",
+        "duration": "1.492154",
+        "included": true,
+        "draft": false,
+        "sound_label": "seal",
+        "sound_label_id": "nan",
+        "sound_recording": "seal_barking.wav",
+        "recording_description": "seal"
+    }
+}

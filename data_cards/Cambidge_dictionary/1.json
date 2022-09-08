@@ -1,0 +1,14 @@
+{
+    "text": [
+        "the person is reading the word downloadable in American accent"
+    ],
+    "tag": [
+        "downloadable"
+    ],
+    "original_data": {
+        "title": "Cambridge Dictionary dataset",
+        "Description": "Words and their pronunciations scraped from the Cambridge Dictionary website",
+        "URL": "https://dictionary.cambridge.org/media/english/us_pron/c/cus/cus00/cus00611.mp3",
+        "accent": "American"
+    }
+}

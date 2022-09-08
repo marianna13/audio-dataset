@@ -1,0 +1,24 @@
+{
+    "text": [
+        "playing song titled White Man, by Blah Blah Blah, in album Green Collection, of which the language code is en, the genre is Rock, the date created is 2008-11-26 01:53:43"
+    ],
+    "tag": [
+        "White Man"
+    ],
+    "original_data": {
+        "title": "FMA: A Dataset For Music Analysis",
+        "description": "Free Music Archive (FMA), an open and easily accessible dataset suitable for evaluating several tasks in MIR, a field concerned with browsing, searching, and organizing large music collections.",
+        "license": "MIT License",
+        "filename": "000142.mp3",
+        "genre": "Rock",
+        "album": "Green Collection",
+        "duration": 270,
+        "composer": "nan",
+        "date_recorded": "2008-11-26 01:53:43",
+        "language_code": "en",
+        "split": [
+            70,
+            80
+        ]
+    }
+}
