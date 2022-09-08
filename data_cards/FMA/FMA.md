@@ -59,6 +59,6 @@ from the meta data (fma_metadata/tracks.csv) and form a 3-field `.json` file for
 ### II. Audio filtering principles
 1. Keep audios with sampling rate higher than **16KHZ** and discard the rest.
 2. Discard all audios failed to be read by `soundfile.read()` method or denied by FFmpeg while processing.
-3. Split evry audio in 10 sec segements.
+3. Split every audio in 10 sec segements.
 ### III. Audio format specifications
 After the preprocessing work, all audio files should be in FLAC format with sampling rate of 48KHZ. (Processed by ffmpeg).
