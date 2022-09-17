@@ -24,17 +24,17 @@ from these 6 fields and form a 2-field `.json` file for each audio. Here are som
 ```json
 {
     "text": [
-        "a person saying but it would be less work to believe me besides frenchmen englishmen americans danes and norwegians catch these cod by the thousands they're eaten in prodigious quantities and without"
+        "a person saying \"saying above all make haste your recital could not be more minute exclaimed lecoq approvingly now how about these two women\""
     ],
     "original_data": {
         "title": "librispeech_asr",
         "description": "LibriSpeech is a corpus of approximately 1000 hours of 16kHz read English speech, prepared by Vassil Panayotov with the assistance of Daniel Povey. ",
         "license": "CC BY 4.0",
-        "filename": "839-130898-0034.flac",
-        "text": "BUT IT WOULD BE LESS WORK TO BELIEVE ME BESIDES FRENCHMEN ENGLISHMEN AMERICANS DANES AND NORWEGIANS CATCH THESE COD BY THE THOUSANDS THEY'RE EATEN IN PRODIGIOUS QUANTITIES AND WITHOUT",
-        "speaker_id": 839,
-        "chapter_id": 130898,
-        "id": "839-130898-0034"
+        "filename": "6081-41997-0014.flac",
+        "text": "SAYING ABOVE ALL MAKE HASTE YOUR RECITAL COULD NOT BE MORE MINUTE EXCLAIMED LECOQ APPROVINGLY NOW HOW ABOUT THESE TWO WOMEN",
+        "speaker_id": 6081,
+        "chapter_id": 41997,
+        "id": "6081-41997-0014"
     }
 }
 ```
@@ -43,7 +43,7 @@ from these 6 fields and form a 2-field `.json` file for each audio. Here are som
 
 
 ### I. Json file generation principles 
--  **` text  entry`** We just take data from `text` field of the original dataset and create a caption with template `a person saying {text}`.
+-  **` text  entry`** We just take data from `text` field of the original dataset and create a caption with template `a person saying "{text}"`.
 
 ### II. Audio filtering principles
 1. Keep audios with sampling rate higher than **16KHZ** and discard the rest.
