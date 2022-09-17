@@ -2,7 +2,7 @@
 ## Dataset Overview
 |Size of dataset|Number of audios|
 |:----:|:-----:|
-|1.0 TiB| 2 324 700|
+|1.1 TiB| 2 324 700|
 ## Data Collection
 
 |Source|<center>Collecting Method<center>|
