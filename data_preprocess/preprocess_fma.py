@@ -172,7 +172,7 @@ if __name__ == '__main__':
     from utils.merge_dirs import merge_dirs
     from utils.unzip import unzip_file
     dataset_name = 'fma'
-    src_file = 'fma_small.zip'
+    src_file = 'fma_full.zip'
     archive = zipfile.ZipFile(src_file)
     subfolders = sorted(set([os.path.dirname(x) for x in archive.namelist()]))
 

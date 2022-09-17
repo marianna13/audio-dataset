@@ -29,9 +29,12 @@ def split_dataset(data_dir):
             json_file = audio_file.replace('.flac', '.json')
             audio_save_path = os.path.join(split_output_dir, f'{file_id}.flac')
             audio_json_save_path = audio_save_path.replace('.flac', '.json')
-            shutil.move(audio_file, audio_save_path)
-            shutil.move(json_file, audio_json_save_path)
-            file_id += 1
+            try:
+                shutil.move(audio_file, audio_save_path)
+                shutil.move(json_file, audio_json_save_path)
+                file_id += 1
+            except:
+                continue
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
