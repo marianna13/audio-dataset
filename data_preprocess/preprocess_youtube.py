@@ -7,8 +7,8 @@ import time
 import multiprocessing as mp
 from pytube import Channel
 import soundfile as sf
-import 
 import sys
+import yt_dlp
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 def download_from_URL(URL, output_dir):
@@ -72,9 +72,9 @@ def process_channel(channel_name, channel_url, video_urls, output_dir, audio_dir
                 if '[Music]' in text or 'Transcriber' in text or 'Translator' in text:
                     continue
                 text = text.replace('\n', '').replace(u'\u2019', "'").replace('\ufeff', '')
-                caption = f'a person saying {text}'
+                caption = f'a person saying "{text}"'
                 if '[' in text and ']' in text:
-                    caption = text.replece('[', '').replece(']', '')
+                    caption = text.replace('[', '').replece(']', '')
                 audio_json = {
                     'text': [caption],
                     'tag': [title, f'{channel_name} Youtube Video'],
