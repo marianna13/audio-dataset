@@ -10,7 +10,7 @@
 | [WavText5K GitHub repo](https://github.com/microsoft/WavText5K)  |1.Download meta data (WavText5K.csv) from the repo. 2. For evry row in meta data download th audio file using the download_link. <br>
 ## Preprocessing Principles
 
-You may refer to [preprocess_WavText5K.py](/data_preprocess/preprocess_WavText5Ky.py) for all the details. Here is a concise summary:
+You may refer to [preprocess_WavText5K.py](/data_preprocess/preprocess_WavText5K.py) for all the details. Here is a concise summary:
 
 We retrieve information
 from the meta data (WavText5K.csv) and form a 3-field `.json` file for each audio. Here are some audio-json pairs selected from the processed dataset:
