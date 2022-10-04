@@ -1,0 +1,18 @@
+{
+    "text": [
+        "the sound of waterfall burbling"
+    ],
+    "tag": [
+        "waterfall burbling"
+    ],
+    "original_data": {
+        "title": "VGG-Sound",
+        "license": "Creative Commons Attribution 4.0 International License",
+        "description": "VGG-Sound is an audio-visual correspondent dataset consisting of short clips of audio sounds, extracted from videos uploaded to YouTube",
+        "filename": "--0PQM4-hqg.wav",
+        "url": "https://www.youtube.com/watch?v=--0PQM4-hqg",
+        "label": "waterfall burbling",
+        "start": 30,
+        "split": "train"
+    }
+}
