@@ -7,7 +7,8 @@
 
 |Source|<center>Collecting Method<center>|
 |:---------:|:--------|
-| [VGG-Sound website](https://www.robots.ox.ac.uk/~vgg/data/vggsound/)  |1. Download meta data fro m the website.2. For every row in meta dat download corresponding youtube audio and extract a specific segment. <br>
+| [VGG-Sound website](https://www.robots.ox.ac.uk/~vgg/data/vggsound/)  |1. Download meta data fro m the website.
+      2. For every row in meta data download corresponding youtube audio and extract a specific segment. <br>
 ## Preprocessing Principles
 
 You may refer to [preprocess_vggsound.py](/data_preprocess/preprocess_vggsound.py) for all the details. Here is a concise summary:
@@ -48,7 +49,7 @@ from the meta data (vggsound.csv) and form a 3-field `.json` file for each audio
 ### I. Json file generation principles 
 -  **` text  entry`** We take the label for each audio and create a caption with template `the sound of {label}`.
 -  **` tag  entry`** We use the label for each vocal imitation as a tag.
--  **` original data`** We save all the data from each row of vggsound.csv for every audio as well as timestamps, dataset name and dataset description.
+-  **` original data`** We save all the data from each row of vggsound.csv for every audio as well as timestamp, dataset name and dataset description.
 
 ### II. Audio filtering principles
 1. Keep audios with sampling rate higher than **16KHZ** and discard the rest.
