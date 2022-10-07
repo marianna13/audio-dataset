@@ -1,0 +1,17 @@
+{
+    "text": [
+        "the sound of squeak"
+    ],
+    "tag": [
+        "Squeak"
+    ],
+    "original_data": {
+        "title": "Audioset Strong",
+        "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+        "description": "Additional annotation on some of the AudioSet clips, this time using a procedure that instructed the annotators to mark every distinct sound event they perceived (complete annotation), and to indicate the start and end times of each event by dragging out a region on a spectrogram (\u201cstrong\u201d labeling).",
+        "url": "https://www.youtube.com/watch?v=--4gqARaEJE",
+        "label": "Squeak",
+        "start": 5.622000000000001,
+        "end": 6.693
+    }
+}
