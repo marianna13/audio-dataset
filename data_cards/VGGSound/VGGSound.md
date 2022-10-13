@@ -1,13 +1,13 @@
 # VGG-Sound Data Card
 ## Dataset Overview
-|Size of dataset|Number of audios|
-|:----:|:-----:|
-|74 GB| 180 879|
+|Size of dataset|Number of audios|Duration|
+|:----:|:-----:|:-----:|
+|74 GB| 180 833|501.27 hrs|
 ## Data Collection
 
 |Source|<center>Collecting Method<center>|
 |:---------:|:--------|
-| [VGG-Sound website](https://www.robots.ox.ac.uk/~vgg/data/vggsound/)  |1. Download meta data fro m the website. 2. For every row in meta data download corresponding youtube audio and extract a specific segment. <br>
+| [VGG-Sound website](https://www.robots.ox.ac.uk/~vgg/data/vggsound/)  |1. Download meta data fro m the website. 2. For every row in meta data download corresponding youtube audio and ext    ract a specific segment. <br>
 ## Preprocessing Principles
 
 You may refer to [preprocess_vggsound.py](/data_preprocess/preprocess_vggsound.py) for all the details. Here is a concise summary:

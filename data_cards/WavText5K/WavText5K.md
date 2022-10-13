@@ -1,8 +1,8 @@
 # WavText5K Data Card
 ## Dataset Overview
-|Size of dataset|Number of audios|
+|Size of dataset|Number of audios|Duration|
 |:----:|:-----:|
-|5.2 GB| 4525|
+|5.2 GB| 4524| 25.48 hrs]
 ## Data Collection
 
 |Source|<center>Collecting Method<center>|
