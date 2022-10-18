@@ -61,9 +61,9 @@ def preprocess(dataset_name, num_process):
     output_dir = f'{dataset_name}_processed'
     if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-    audio_dir = f'/fsx/marianna/clap/BoomLibrary/520m/AUDIO'
+    audio_dir = f'520m'
 
-    meta_dir = '/fsx/marianna/clap/BoomLibrary/520m/00_Death_Whistle_Metadata.xlsx'
+    meta_dir = '520m/00_Death_Whistle_Metadata.xlsx'
 
     meta = pd.read_excel(meta_dir)[['Filename', 'Description', 'Library', 'Category', 'SubCategory', 'Keywords', 'BWDescription']]
 
@@ -90,4 +90,9 @@ def preprocess(dataset_name, num_process):
     print(f'Processed in {round(e-s, 2)} seconds')
 
 if __name__=='__main__':
-    preprocess(dataset_name='boom_library_520m', num_process=1)
+    data_dir = 'BoomLibary'
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    os.system(f'aws s3 cp s3://s-laion-audio/raw_dataset/BoomLibrary_Free_Datasets {data_dir}')
+    os.sytem(f'unzip {data_dir}/fsdw_520mb.zip -d 620m')
+    preprocess(dataset_name='boom_library_520m', num_process=4)
