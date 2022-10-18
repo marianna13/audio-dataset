@@ -20,10 +20,10 @@ parser.add_argument('--folder',
 
 
 def unzip_file(src_file, target_dir, folder):
+    archive = zipfile.ZipFile(src_file)
     if folder=='all':
-        subprocess.call(['7z', 'e', src_file, '-o'+target_dir, '-aoa'])
+        archive.extractall(target_dir)
     else:
-        archive = zipfile.ZipFile(src_file)
         for file in archive.namelist():
             if file.startswith(folder+'/'):
                 archive.extract(file, f'{target_dir}/{src_file.split("/")[-1].replace(".zip","")}')
