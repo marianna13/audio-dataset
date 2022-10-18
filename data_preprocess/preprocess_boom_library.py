@@ -94,5 +94,5 @@ if __name__=='__main__':
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
     os.system(f'aws s3 cp s3://s-laion-audio/raw_dataset/BoomLibrary_Free_Datasets {data_dir}')
-    os.sytem(f'unzip {data_dir}/fsdw_520mb.zip -d 620m')
+    os.system(f'unzip {data_dir}/fsdw_520mb.zip -d 620m')
     preprocess(dataset_name='boom_library_520m', num_process=4)
