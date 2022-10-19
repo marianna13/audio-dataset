@@ -18,9 +18,10 @@ def process_part(meta, output_dir, audio_dir):
     file_id = 0
     
     for row in tqdm(meta.iterrows(), total=len(meta)):
-            filename, description = row[1].values
+            filename, cat_index, cat1, cat2, cat3, cat4, cat5, cat6, reference_fname, included, draft, training, participant_id,satisfaction, participants_sound_recording_description, participants_sound_recording_description_confidence = row[1].values
             audio_path = audio_dir+'/'+filename
-
+            if not included or 'dissatisfied' in satisfaction:
+                continue
        
             try: 
             	f = AudioSegment.from_file(audio_path)
@@ -28,7 +29,9 @@ def process_part(meta, output_dir, audio_dir):
        	    except:
            	 continue
 
-       	    tags = [' '.join([ k for k in filename.split() if '_' not in k]), 'Anti-aircraft gun']
+            description = participants_sound_recording_description
+
+       	    tags = [cat1, cat2, cat3]
 
      
             audio_json_save_path = f'{output_dir}/{file_id}.json'
@@ -37,10 +40,16 @@ def process_part(meta, output_dir, audio_dir):
                         'text': [description],
                         'tag': tags,
                         'original_data': {
-                            'title': 'Boom Library',
-                            'description':'Sound effects library',
-                            'description_audio':description,
-                            'filename':filename
+                            'title': 'Fine-grained Vocal Imitation Set',
+                            'description':'This dataset includes 763 vocal imitations of 108 sound events. The sound event recordings were taken from a subset of Vocal Imitation Set.',
+                            'license': 'Creative Commons Attribution 4.0 International',
+                            'category_d1': cat1,
+                            'category_d2': cat2,
+                            'category_d3': cat3,
+                            'filename':filename,
+                            'duration':duration,
+                            'participants_sound_recording_description':participants_sound_recording_description,
+                            'participants_sound_recording_description_confidence':participants_sound_recording_description_confidence
                             },
                             }
             json_dump(audio_json, audio_json_save_path)
@@ -55,11 +64,11 @@ def preprocess(dataset_name, num_process):
     output_dir = f'{dataset_name}_processed'
     if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-    audio_dir = f'BOOM'
+    audio_dir = 'FineGrained/Fine-grained_VocalImitationSet/AUDIO'
 
-    meta_dir = 'BOOM/00_ZU-23-2_Anti-Aircraft_Gun_Metadata.xlsx'
+    meta_dir = 'FineGrained/Fine-grained_VocalImitationSet/vocal_imitations.txt'
 
-    meta = pd.read_excel(meta_dir)
+    meta = pd.read_csv(meta_dir, sep='\t', index_col=0)
 
     N = len(meta)
     print(N)
@@ -84,7 +93,4 @@ def preprocess(dataset_name, num_process):
     print(f'Processed in {round(e-s, 2)} seconds')
 
 if __name__=='__main__':
-    data_dir = 'BoomLibary'
-    if not os.path.exists(data_dir):
-        os.makedirs(data_dir)
-    preprocess(dataset_name='boom_library_anti_aircraft', num_process=4)
+    preprocess(dataset_name='Fine_grained_VocalImitationSet', num_process=4)
