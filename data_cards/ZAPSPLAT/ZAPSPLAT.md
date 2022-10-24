@@ -13,7 +13,7 @@
 You may refer to [preprocess_zapsplat.py](/data_preprocess/preprocess_zapsplat.py) for all the details. Here is a concise summary:
 
 We retrieve information
-from the meta data (meta.csv) and form a 3-field `.json` file for each audio. Here are some audio-json pairs selected from the processed dataset:
+from the meta data (meta.parquet) and form a 3-field `.json` file for each audio. Here are some audio-json pairs selected from the processed dataset:
 
 
 #### 
