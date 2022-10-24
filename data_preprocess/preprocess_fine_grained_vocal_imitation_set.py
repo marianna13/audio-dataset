@@ -20,9 +20,7 @@ def process_part(meta, output_dir, audio_dir):
     for row in tqdm(meta.iterrows(), total=len(meta)):
             filename, cat_index, cat1, cat2, cat3, cat4, cat5, cat6, reference_fname, included, draft, training, participant_id,satisfaction, participants_sound_recording_description, participants_sound_recording_description_confidence = row[1].values
             audio_path = audio_dir+'/'+filename
-            if not included or 'dissatisfied' in satisfaction:
-                continue
-       
+      
             try: 
             	f = AudioSegment.from_file(audio_path)
             	duration = int(f.duration_seconds)
@@ -32,12 +30,10 @@ def process_part(meta, output_dir, audio_dir):
             description = participants_sound_recording_description
 
        	    tags = [cat1, cat2, cat3]
-
-     
             audio_json_save_path = f'{output_dir}/{file_id}.json'
             audio_save_path = f'{output_dir}/{file_id}.flac'
             audio_json = {
-                        'text': [description],
+                        'text': [description.lstrip()],
                         'tag': tags,
                         'original_data': {
                             'title': 'Fine-grained Vocal Imitation Set',

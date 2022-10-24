@@ -95,7 +95,7 @@ def process_channel(channel_name, channel_url, video_urls, output_dir, audio_dir
                 break
             except KeyError:
                 continue
-"/home/ubuntu/marianna/clap/BBCNews/'Monsoon on Steroids'： Investigating Pakistan's unprecedented floods - BBC Newsnight.wav"
+
 def preprocess(channel_name, num_process):
 
     channel_url = f'hhttps://www.youtube.com/c/{channel_name}'  

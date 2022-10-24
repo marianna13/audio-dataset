@@ -1,0 +1,22 @@
+{
+    "text": [
+        "a dog growling"
+    ],
+    "tag": [
+        "Animal",
+        "Domestic animals, pets",
+        "Dog"
+    ],
+    "original_data": {
+        "title": "Fine-grained Vocal Imitation Set",
+        "description": "This dataset includes 763 vocal imitations of 108 sound events. The sound event recordings were taken from a subset of Vocal Imitation Set.",
+        "license": "Creative Commons Attribution 4.0 International",
+        "category_d1": "Animal",
+        "category_d2": "Domestic animals, pets",
+        "category_d3": "Dog",
+        "filename": "005Animal_Domestic animals_ pets_Dog_Growling-322.wav",
+        "duration": 10,
+        "participants_sound_recording_description": "a dog growling",
+        "participants_sound_recording_description_confidence": "Very confident"
+    }
+}

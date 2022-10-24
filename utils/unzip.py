@@ -40,5 +40,5 @@ if __name__=='__main__':
     folder = args.folder
     if '.rar' in src_file:
         unrar_file(src_file, target_dir, folder)
-    elif '.zip' in src_file:
+    else:
         unzip_file(src_file, target_dir, folder)
