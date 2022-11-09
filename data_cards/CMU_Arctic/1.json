@@ -1,0 +1,18 @@
+{
+    "text": [
+        "A man reads out \"Famine had been my great ally.\" in the Indian accent"
+    ],
+    "tag": [
+        "male",
+        "Indian accent"
+    ],
+    "original_data": {
+        "title": "CMU_Arctic",
+        "description": "The databases consist of around 1150 utterances carefully selected from out-of-copyright texts from Project Gutenberg. The databses include US English male (bdl) and female (slt) speakers (both experinced voice talent) as well as other accented speakers.",
+        "license": "BSD",
+        "text": "Famine had been my great ally.",
+        "accent": "Indian",
+        "gender": "male",
+        "filename": "cmu_in_male_3/arctic_b0436.wav"
+    }
+}

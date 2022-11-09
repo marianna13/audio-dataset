@@ -1,0 +1,22 @@
+{
+    "text": [
+        "air leakage of sorts "
+    ],
+    "tag": [
+        "Animal",
+        "Domestic animals, pets",
+        "Cat"
+    ],
+    "original_data": {
+        "title": "Fine-grained Vocal Imitation Set",
+        "description": "This dataset includes 763 vocal imitations of 108 sound events. The sound event recordings were taken from a subset of Vocal Imitation Set.",
+        "license": "Creative Commons Attribution 4.0 International",
+        "category_d1": "Animal",
+        "category_d2": "Domestic animals, pets",
+        "category_d3": "Cat",
+        "filename": "001Animal_Domestic animals_ pets_Cat_Hiss-132.wav",
+        "duration": 10,
+        "participants_sound_recording_description": "air leakage of sorts ",
+        "participants_sound_recording_description_confidence": "Neutral"
+    }
+}

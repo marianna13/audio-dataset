@@ -1,0 +1,17 @@
+{
+    "text": [
+        "sound of knocking with sadness"
+    ],
+    "tag": [
+        "sound of knocking",
+        "sadness"
+    ],
+    "original_data": {
+        "title": "Knocking Sound Effects With Emotional Intentions",
+        "description": "The dataset was recorded by the professional foley artist Ulf Olausson at the FoleyWorks (http://foleyworks.se/) studios in Stockholm on the 15th October, 2019. Inspired by previous work on knocking sounds [1]. we chose five type of emotions to be portrayed in the dataset: anger, fear, happiness, neutral and sadness.",
+        "license": "Creative Commons Attribution 4.0 International",
+        "filename": "sadness_73.wav",
+        "duration": 1.4817083333333334,
+        "emotion": "sadness"
+    }
+}

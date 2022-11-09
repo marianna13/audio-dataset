@@ -1,0 +1,20 @@
+{
+    "text": [
+        "playing song \"Hey There Delilah\" by Plain White T's, in the \"All That We Needed\" album"
+    ],
+    "tag": [
+        "music",
+        "song",
+        "Hey There Delilah",
+        "Plain White T's",
+        "All That We Needed"
+    ],
+    "original_data": {
+        "title": "Tunebot",
+        "description": "The dataset is a collection of 10,000 sung contributions to the Tunebot search engine. Each contribution is a recording of a contributor singing a song to Tunebot. In addition to the 10,000 contributions, there is an associated Google spreadsheet to look up the artist, album, and song for any file. ",
+        "song": "Hey There Delilah",
+        "artist": "Plain White T's",
+        "album": "All That We Needed",
+        "filename": "2008/01/01/1199167200101_48496.wav"
+    }
+}
