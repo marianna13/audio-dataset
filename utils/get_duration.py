@@ -17,10 +17,14 @@ def get_flac_duration(filename: str) -> float:
     https://xiph.org/flac/format.html
     """
     with open(filename, 'rb') as f:
-        if f.read(4) != b'fLaC':
-            raise ValueError('File is not a flac file')
         header = f.read(4)
         while len(header):
+            # if header != b'fLaC':
+            #     try:
+            #         os.remove(filename)
+            #     except Exception as err:
+            #         continue
+            #     continue
             meta = struct.unpack('4B', header)
             block_type = meta[0] & 0x7f  
             size = bytes_to_int(header[1:4])

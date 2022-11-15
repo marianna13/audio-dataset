@@ -1,12 +1,13 @@
 from pytube import YouTube
+# from pytube import Channel
 from tqdm import tqdm
 import xmltodict
 import os
 import json
 import time
 import multiprocessing as mp
-from pytube import Channel
 import soundfile as sf
+import pandas as pd
 import sys
 import yt_dlp
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -31,13 +32,16 @@ def download_from_URL(URL, output_dir):
         info = ydl.extract_info(URL, download=False)
         return info['title'], info['id']+'.wav'
 
-def process_channel(channel_name, channel_url, video_urls, output_dir, audio_dir):
+def process_channel(video_urls, output_dir, audio_dir, channel_name=None):
     from utils.file_utils import json_dump
     from utils.audio_utils import audio_to_flac
     from utils.dataset_parameters import AUDIO_SAVE_SAMPLE_RATE
     file_id = 0
     
     for video_url in tqdm(video_urls, total=len(video_urls)):
+
+        if file_id == 2:
+            break
         yt = YouTube(video_url)
         print(video_url)
 
@@ -46,11 +50,13 @@ def process_channel(channel_name, channel_url, video_urls, output_dir, audio_dir
         except KeyError:
             try:
                 caption = yt.captions['en']
-            except KeyError:
-                try:
-                    caption = yt.captions['a.en']
-                except kedyError:
-                    continue
+            except:
+                continue
+                # try:
+                #     caption = yt.captions['a.en']
+                # except kedyError:
+                #     continue
+
         title, wav_path = download_from_URL(video_url,audio_dir)
 
         js = xmltodict.parse(caption.xml_captions)
@@ -75,38 +81,46 @@ def process_channel(channel_name, channel_url, video_urls, output_dir, audio_dir
                 caption = f'a person saying "{text}"'
                 if '[' in text and ']' in text:
                     caption = text.replace('[', '').replece(']', '')
+
+                tags = [title, f'{channel_name} Youtube Video'] if channel_name else [title]
                 audio_json = {
                     'text': [caption],
-                    'tag': [title, f'{channel_name} Youtube Video'],
-                    'original_data': {
-                        'title': 'YT dataset',
-                        'filename':filename,
-                        'url': video_url,
-                        'duration':d,
-                        'start':t,
-                        'end':end
-                        },
+                    'start':t,
+                    'end':end,
+                    'duration':d,
+                    'url':f'{video_url}&t={t}s'
+                    # 'tag': [title, f'{channel_name} Youtube Video'],
+                    # 'original_data': {
+                    #     'title': 'YT dataset',
+                    #     'filename':filename,
+                    #     'url': video_url,
+                    #     'duration':d,
+                    #     'start':t,
+                    #     'end':end
+                    #     },
                         }
                 json_dump(audio_json, audio_json_save_path)
                 audio_to_flac(audio_path, audio_save_path,
                             AUDIO_SAVE_SAMPLE_RATE, segment_start=t,  segment_end=end)
 
                 file_id +=1
-                break
             except KeyError:
                 continue
 
 def preprocess(channel_name, num_process):
 
-    channel_url = f'hhttps://www.youtube.com/c/{channel_name}'  
-    output_dir = f'/home/ubuntu/marianna/clap/{channel_name}_processed'
-    if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-    audio_dir = f'/home/ubuntu/marianna/clap/{channel_name}/'
+    # channel_url = f'https://www.youtube.com/c/{channel_name}'  
+    output_dir = f'{channel_name}_processed'
+    # if not os.path.exists(output_dir):
+    #         os.makedirs(output_dir)
+    audio_dir = f'{channel_name}/'
     if not os.path.exists(audio_dir):
             os.makedirs(audio_dir)
-    c = Channel(channel_url)
-    video_urls = c.video_urls
+    # c = Channel(channel_url)
+    df = pd.read_parquet('sample1k.parquet').sample(100)
+    df['URL'] = df.ID.apply(lambda x: 'https://www.youtube.com/watch?v='+x)
+    video_urls = df.URL.values
+    # video_urls = c.video_urls
     N = len(video_urls)
     print(N)
     processes = []
@@ -121,7 +135,7 @@ def preprocess(channel_name, num_process):
     for rng, out_dir in zip(rngs, out_dirs):
         start, end = rng
         p = mp.Process(target=process_channel, args=[
-                       channel_name, channel_url, video_urls[start:end], out_dir, audio_dir])
+                       video_urls[start:end], out_dir, audio_dir, channel_name])
         p.start()
         processes.append(p)
     for p in processes:
@@ -130,4 +144,4 @@ def preprocess(channel_name, num_process):
     print(f'Processed in {round(e-s, 2)} seconds')
 
 if __name__=='__main__':
-    preprocess(channel_name='TED', num_process=10)
+    preprocess(channel_name='test', num_process=10)

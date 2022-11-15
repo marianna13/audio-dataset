@@ -1,0 +1,19 @@
+{
+    "text": [
+        "playing drums version of the song \"Patrick Talbot\" by Set Me Free"
+    ],
+    "tag": [
+        "music",
+        "song",
+        "Patrick Talbot",
+        "Set Me Free",
+        "drums"
+    ],
+    "original_data": {
+        "title": "MUSDB18-HQ",
+        "description": "MUSDB18-HQ is the uncompressed version of the MUSDB18 dataset. It consists of a total of 150 full-track songs of different styles and includes both the stereo mixtures and the original sources, divided between a training subset and a test subset.",
+        "license": "MUSDBHQ: is provided for educational purposes only and the material contained in them should not be used for any commercial purpose without the express permission of the copyright holders",
+        "filename": "train/Patrick Talbot - Set Me Free/drums.wav",
+        "split": "train"
+    }
+}
