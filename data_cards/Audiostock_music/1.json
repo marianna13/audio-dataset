@@ -1,0 +1,34 @@
+{
+    "text": [
+        "Pops imagining the beginning of a fresh song"
+    ],
+    "tag": [
+        "morning",
+        "beginning",
+        "bright",
+        "enjoy",
+        "refresh",
+        "getting up",
+        "sunny",
+        "light(sprightly)",
+        "refreshing",
+        "positive",
+        "opening",
+        "drama",
+        "anime",
+        "chillin",
+        "coffee",
+        "breakfast",
+        "window",
+        "sun",
+        "holiday"
+    ],
+    "original_data": {
+        "title": "Audiostock dataset",
+        "Description": "Audio scraped from the audiostock.net website",
+        "URL": "https://audiostock.net/audio/198449/play",
+        "purpose": "Anime,Opening",
+        "impression": "Enjoy,Chill,Bright,Light,Sunshine,Refreshing,Morning,Holiday,Sunny,Beginning",
+        "audio_size": 19.6222
+    }
+}
