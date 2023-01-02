@@ -7,10 +7,10 @@
 
 |Source|<center>Collecting Method<center>|
 |:---------:|:--------
-| [Tunebot Website](https://interactiveaudiolab.github.io/resources/datasets/tunebot.html)  | Request access and download the archive of audio files and the meta data from the website  <br>
+| [MUSDB18-HQ Website](https://zenodo.org/record/3338373#.YaEFfbqOFaQ)  | Request access and download the archive of audio files and the meta data from the website  <br>
 ## Preprocessing Principles
 
-You may refer to [preprocess_tunebot.py](/data_preprocess/preprocess_tunebot.py) for all the details. Here is a concise summary:
+You may refer to [preprocess_musdb18hq.py](data_preprocess/preprocess_musdb18hq.py) for all the details. Here is a concise summary:
 
 We retrieve information
 from the meta data and form a 3-field `.json` file for each audio. Here are some audio-json pairs selected from the processed dataset:

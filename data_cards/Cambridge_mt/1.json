@@ -1,0 +1,22 @@
+{
+    "text": [
+        "playing song \"Jesse Joy  Release\" by Jesse Joy, in project \"'Release'\""
+    ],
+    "tag": [
+        "music",
+        "song",
+        "Jesse Joy  Release",
+        "Jesse Joy",
+        "'Release'"
+    ],
+    "original_data": {
+        "title": "Cambridge-mt Multitrack Dataset",
+        "description": "Here's a list of multitrack projects which can be freely downloaded for mixing practice purposes. All these projects are presented as ZIP archives containing uncompressed WAV files (24-bit or 16-bit resolution and 44.1kHz sample rate).",
+        "song1": "Jesse Joy  Release",
+        "artist": "Jesse Joy",
+        "project": "'Release'",
+        "filename": "JesseJoy_Release",
+        "url": "https://multitracks.cambridge-mt.com/JesseJoy_Release.zip",
+        "project_type": "Excerpt"
+    }
+}
