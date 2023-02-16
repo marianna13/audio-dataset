@@ -2,6 +2,7 @@ import os
 import struct
 from tqdm import tqdm
 import argparse
+import glob
 
 
 def bytes_to_int(bytes: list) -> int:
@@ -47,11 +48,15 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     data_dir = args.data_dir
-    flacs = [f'{data_dir}/{f}' for f in os.listdir(data_dir) if '.flac' in f]
+    flacs = glob.glob(f'{data_dir}/**/*.flac', recursive=True)
 
     audio = 0
     for f in tqdm(flacs, total=len(flacs)):
-
-        audio += get_flac_duration(f)
+        d = get_flac_duration(f)
+        if d == 0:
+            print(f)
+            os.remove(f)
+            os.remove(f.replace('.flac', '.json'))
+        audio += d
 
     print(audio)

@@ -5,8 +5,19 @@ import glob
 import random
 import numpy as np
 from tqdm import tqdm
+import threading as td
+import multiprocessing as mp
 
 random.seed(1234)
+
+def split_part(files, split_output_dir, file_id):
+    for audio_file in tqdm(files):
+        json_file = audio_file.replace('.flac', '.json')
+        audio_save_path = os.path.join(split_output_dir, f'{file_id}.flac')
+        audio_json_save_path = audio_save_path.replace('.flac', '.json')
+        shutil.move(audio_file, audio_save_path)
+        shutil.move(json_file, audio_json_save_path)
+        file_id += 1
 
 def split_dataset(data_dir):
     test_portion = 0.1
@@ -25,13 +36,28 @@ def split_dataset(data_dir):
     for split in splits:
         split_output_dir = os.path.join(data_dir, split)
         os.makedirs(split_output_dir, exist_ok=True)
-        for audio_file in tqdm(split_file_list[split]):
-            json_file = audio_file.replace('.flac', '.json')
-            audio_save_path = os.path.join(split_output_dir, f'{file_id}.flac')
-            audio_json_save_path = audio_save_path.replace('.flac', '.json')
-            shutil.move(audio_file, audio_save_path)
-            shutil.move(json_file, audio_json_save_path)
-            file_id += 1
+        N = len(split_file_list[split])
+        num_process = 10
+        rngs = [(i*int(N/num_process), (i+1)*int(N/num_process))
+            for i in range(num_process)]
+        print(N, rngs)
+        processes = []
+        for rng in rngs:
+            start, end = rng
+            p = td.Thread(target=split_part, args=[
+                        split_file_list[split][start:end], split_output_dir, file_id])
+            p.start()
+            processes.append(p)
+            file_id += end
+        for p in processes:
+            p.join()
+        # for audio_file in tqdm(split_file_list[split]):
+        #     json_file = audio_file.replace('.flac', '.json')
+        #     audio_save_path = os.path.join(split_output_dir, f'{file_id}.flac')
+        #     audio_json_save_path = audio_save_path.replace('.flac', '.json')
+        #     shutil.move(audio_file, audio_save_path)
+        #     shutil.move(json_file, audio_json_save_path)
+        #     file_id += 1
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

@@ -11,6 +11,25 @@ import scipy.signal as sps
 import soundfile as sf
 from tqdm import tqdm
 import tarfile
+import threading as td
+
+def create_tar(idx, tar_name, filelist, file_path, text_ext):
+    for i in tqdm(idx, total=len(idx)):
+        with tarfile.open(tar_name + str(i) + ".tar", "w") as tar_handle:
+            # for j in range(, len(filelist)):
+                audio = filelist[i]
+                basename = ".".join(audio.split(".")[:-1])
+                text_file_path = os.path.join(file_path, basename + text_ext)
+                audio_file_path = os.path.join(file_path, audio)
+                tar_handle.add(audio_file_path)
+                tar_handle.add(text_file_path)
+                # if delete_file:
+                #     os.remove(audio_file_path)
+                #     os.remove(text_file_path)
+                # if (j + 1) % n_entry_each == 0:
+                #     count = j + 1
+                #     break
+        tar_handle.close()
 
 
 def tardir(
@@ -43,6 +62,21 @@ def tardir(
         size_dict[os.path.basename(tar_name) + str(n_split - 1) + ".tar"] = (
             len(filelist) - (n_split - 1) * n_entry_each
         )
+    # idx = [i for i in range(start_idx, n_split + start_idx)]
+    # N = len(idx)
+    # num_process = N
+    # rngs = [(i*int(N/num_process), (i+1)*int(N/num_process))
+    #         for i in range(num_process)]
+    # print(N, rngs)
+    # processes= []
+    # for rng in rngs:
+    #     start, end = rng
+    #     p = td.Thread(target=create_tar, args=[
+    #                    idx[start:end], tar_name, filelist, file_path, text_ext])
+    #     p.start()
+    #     processes.append(p)
+    # for p in processes:
+    #     p.join()
     for i in tqdm(range(start_idx, n_split + start_idx)):
         with tarfile.open(tar_name + str(i) + ".tar", "w") as tar_handle:
             for j in range(count, len(filelist)):

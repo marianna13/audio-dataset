@@ -1,5 +1,6 @@
 import os
 
+# add bit depth 16
 
 def audio_to_flac(audio_in_path, audio_out_path, sample_rate=48000, no_log=True, segment_start: float = 0, segment_end: float = None):
     log_cmd = ' -v quiet' if no_log else ''

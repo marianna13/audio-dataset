@@ -1,8 +1,8 @@
 # Free Music Archive (FMA) Data Card
 ## Dataset Overview
-|Size of dataset|Number of audios|
-|:----:|:-----:|
-|1.1 TiB| 2 324 700|
+|Size of dataset|Number of audios|Duration|
+|:----:|:-----:|:-----:|
+|2.4 TiB|99800|7 664 hrs|
 ## Data Collection
 
 |Source|<center>Collecting Method<center>|
